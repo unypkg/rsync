@@ -35,7 +35,7 @@ mkdir -pv /uny/sources
 cd /uny/sources || exit
 
 pkgname="rsync"
-pkggit="https://github.com/rsync/rsync.git refs/tags/*"
+pkggit="https://github.com/rsyncproject/rsync.git refs/tags/*"
 gitdepth="--depth=1"
 
 ### Get version info from git remote
@@ -78,10 +78,15 @@ get_include_paths
 unset LD_RUN_PATH
 
 ./configure \
-    --prefix=/uny/pkg/"$pkgname"/"$pkgver"
+    --prefix=/uny/pkg/"$pkgname"/"$pkgver" \
+    --sysconfdir=/etc/uny/rsync \
+    --disable-lz4 \
+    --disable-xxhash \
+    --without-included-zlib \
+    --disable-md2man
 
 make -j"$(nproc)"
-make -j"$(nproc)" check 
+
 make -j"$(nproc)" install
 
 ####################################################
